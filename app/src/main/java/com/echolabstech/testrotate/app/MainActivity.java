@@ -64,12 +64,12 @@ public class MainActivity extends Activity {
     {
         final String LOCALTAG = TAG+"-getQuandrant";
 
-        float xoffset = (int) (mScreenWidth * .15);
+        float xoffset = (int) (mScreenWidth * 0);
         float xmax = mScreenWidth - xoffset;
         float xmedian = mScreenWidth / 2;
         float xmin = 0 + xoffset;
 
-        float yoffset = (int) (mScreenHeight * .20);
+        float yoffset = (int) (mScreenHeight * 0);
         float ymax = mScreenHeight - yoffset;
         float ymedian = mScreenHeight / 2;
         float ymin = 0 + yoffset + yoffset;
@@ -203,6 +203,7 @@ public class MainActivity extends Activity {
     }
     */
 
+
     @Override
     protected void onResume()
     {
@@ -239,13 +240,18 @@ public class MainActivity extends Activity {
 
                         mlastPointerX = mActivePointers.get(0).x;
                         mLastPointerY = mActivePointers.get(0).y;
+                        error("startX:"+mlastPointerX+", startY"+mLastPointerY);
 
                         break;
                     }
+
                     case MotionEvent.ACTION_MOVE: {
                         // a pointer was moved
+
                         if (event.getPointerCount() == 2) {
-                            int q = getQuadrant(mlastPointerX, mLastPointerY);
+                            error("old x y:"+mlastPointerX+" "+mLastPointerY+" new x y:"+event.getX()+" "+event.getY());
+                            //int q = getQuadrant(mlastPointerX, mLastPointerY);
+                            int q = getQuadrant(event.getX(), event.getY());
                             int direction = getDirection(q, event.getX(), event.getY(), mlastPointerX, mLastPointerY);
                             int rotate = getRotation(direction);
                             diagram.setRotation(diagram.getRotation() + rotate);
@@ -256,6 +262,7 @@ public class MainActivity extends Activity {
                             mLastPointerY = event.getY();
                         }
 
+
                         for (int size = event.getPointerCount(), i = 0; i < size; i++) {
                             PointF point = mActivePointers.get(event.getPointerId(i));
                             if (point != null) {
@@ -263,6 +270,7 @@ public class MainActivity extends Activity {
                                 point.y = event.getY(i);
                             }
                         }
+
 
                         //float angle = (float) Math.toDegrees(Math.atan2(mLastPointerY, mlastPointerX));
                         break;
@@ -297,7 +305,10 @@ public class MainActivity extends Activity {
         */
     }
 
-
+    private void error(String message)
+    {
+        Log.v(TAG, message);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
